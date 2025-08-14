@@ -127,3 +127,7 @@ def download_latest_invoice():
     buf = io.BytesIO(final_pdf_bytes)
     headers = {"Content-Disposition": 'attachment; filename="Invoice_Signed.pdf"'}
     return StreamingResponse(buf, media_type="application/pdf", headers=headers)
+
+@app.get("/ping")
+def ping():
+    return {"status": "Service is up"}
