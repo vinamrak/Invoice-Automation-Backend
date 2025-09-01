@@ -67,8 +67,8 @@ def update_excel_inplace(path: str, invoice_code: str = "BIG") -> None:
     wb = load_workbook(path)
     ws = wb.active
 
-    # today = datetime.today()
-    today = datetime(2026, 1, 1) 
+    today = datetime.today()
+    # today = datetime(2026, 1, 1) 
     current_month = today.month
     current_year = today.year
     year_two_digits = str(current_year)[-2:]
@@ -209,7 +209,7 @@ def ping():
 SMTP_SERVER = "smtp.mail.yahoo.com"
 SMTP_PORT = 587
 SENDER_EMAIL = "vineetkhoria@yahoo.com"
-SENDER_PASSWORD = "kecs ftif zavs xzqu"  # Use App Password for Gmail, not real password
+SENDER_PASSWORD = "fedb pdeq dxkb oupk"  # Use App Password for Gmail, not real password
 
 
 def send_email_with_pdf(to_email: str, subject: str, body: str, pdf_path: str, pdf_name: str, cc_email: str = None):
@@ -218,8 +218,11 @@ def send_email_with_pdf(to_email: str, subject: str, body: str, pdf_path: str, p
     msg["From"] = SENDER_EMAIL
     msg["To"] = to_email
     msg["Subject"] = subject
+    cc_list = []
     if cc_email:
-        msg["Cc"] = cc_email
+        # Split by comma, strip whitespace, and filter out empty strings
+        cc_list = [addr.strip() for addr in cc_email.split(",") if addr.strip()]
+        msg["Cc"] = ", ".join(cc_list)
 
     # Add body
     msg.attach(MIMEText(body, "plain"))
@@ -231,9 +234,7 @@ def send_email_with_pdf(to_email: str, subject: str, body: str, pdf_path: str, p
         msg.attach(pdf)
 
     # Send email
-    recipients = [to_email]
-    if cc_email:
-        recipients.append(cc_email)
+    recipients = [to_email] + cc_list
     with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
         server.starttls()  # Secure connection
         server.login(SENDER_EMAIL, SENDER_PASSWORD)
@@ -248,11 +249,11 @@ def trigger_email(config: dict, background_tasks: BackgroundTasks):
         tmp_pdf.write(final_pdf_bytes)
         tmp_pdf_path = tmp_pdf.name
     # Compose subject with month and year
-    # today = datetime.today()
-    today = datetime(2026, 1, 1) 
+    today = datetime.today()
+    # today = datetime(2026, 1, 1) 
     month_year = today.strftime("%B %Y")
     subject = f"{config['subject']} {month_year}"
-    body = f"Hello, please find attached your invoice for {config['pdf_name'].split('_')[0]}."
+    body = f"Hello, please find attached your invoice for {config['pdf_name'].split('_')[0]}. Kindly ignore the previous email for the January Invoice as that was sent mistakenly."
     background_tasks.add_task(
         send_email_with_pdf,
         config["recipient"],
@@ -267,8 +268,8 @@ def trigger_email(config: dict, background_tasks: BackgroundTasks):
 
 def send_all_invoices():
     print("Sending all invoice emails")
-    # today = datetime.today()
-    today = datetime(2026, 1, 1) 
+    today = datetime.today()
+    # today = datetime(2026, 1, 1) 
     month_year = today.strftime("%B %Y")
     for key, config in INVOICE_CONFIGS.items():
         final_pdf_bytes = generate_invoice_pdf_bytes(config)
@@ -280,7 +281,7 @@ def send_all_invoices():
             send_email_with_pdf(
                 config["recipient"],
                 subject,
-                f"Hello, please find attached your invoice for {key}.",
+                f"Hello, please find attached your invoice for {key}. Kindly ignore the previous email for the January Invoice as that was sent mistakenly.",
                 tmp_pdf_path,
                 config["pdf_name"],
                 config.get("cc")
@@ -295,7 +296,7 @@ scheduler = BackgroundScheduler(timezone=pytz.timezone("Asia/Kolkata"))
 # Schedule to run at 8:00AM on the first day of every month
 scheduler.add_job(
     send_all_invoices,
-    trigger=CronTrigger(day=1, hour=10, minute=35, second=0, timezone=pytz.timezone("Asia/Kolkata")),
+    trigger=CronTrigger(day=1, hour=13, minute=35, second=00, timezone=pytz.timezone("Asia/Kolkata")),
     name="Send invoices monthly at 8:00AM IST on the 1st"
 )
 scheduler.start()
