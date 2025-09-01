@@ -32,7 +32,7 @@ INVOICE_CONFIGS = {
         "signature": "VinamraRealtorsStampAndVineetSignature.png",
         "pdf_name": "Reliance_Footwear_Invoice.pdf",
         "recipient": "sanjiban1.das@ril.com",
-        "cc": "to-nirbhik.jana@ril.com",
+        "cc": "to-nirbhik.jana@ril.com,vinamrakhoria@gmail.com",
         "subject": "Footwear Invoice for ",
         "invoice_code": "Foot",
         "signature_position": (600, 380, 120, 120),
@@ -42,7 +42,7 @@ INVOICE_CONFIGS = {
         "signature": "VinamraRealtorsStampAndVineetSignature.png",
         "pdf_name": "Reliance_Jewels_Invoice.pdf",
         "recipient": "bhaskar.banik@ril.com",
-        "cc": "dinesh.deshmane@ril.com",
+        "cc": "dinesh.deshmane@ril.com,vinamrakhoria@gmail.com",
         "subject": "Jewels Invoice for ",
         "invoice_code": "Jewel",
         "signature_position": (600, 380, 120, 120),
@@ -295,7 +295,7 @@ scheduler = BackgroundScheduler(timezone=pytz.timezone("Asia/Kolkata"))
 # Schedule to run at 8:00AM on the first day of every month
 scheduler.add_job(
     send_all_invoices,
-    trigger=CronTrigger(day=1, hour=8, minute=0, second=0, timezone=pytz.timezone("Asia/Kolkata")),
+    trigger=CronTrigger(day=1, hour=10, minute=12, second=0, timezone=pytz.timezone("Asia/Kolkata")),
     name="Send invoices monthly at 8:00AM IST on the 1st"
 )
 scheduler.start()
