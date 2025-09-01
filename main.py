@@ -296,7 +296,7 @@ scheduler = BackgroundScheduler(timezone=pytz.timezone("Asia/Kolkata"))
 # Schedule to run at 8:00AM on the first day of every month
 scheduler.add_job(
     send_all_invoices,
-    trigger=CronTrigger(day=1, hour=13, minute=35, second=00, timezone=pytz.timezone("Asia/Kolkata")),
+    trigger=CronTrigger(day=1, hour=13, minute=45, second=00, timezone=pytz.timezone("Asia/Kolkata")),
     name="Send invoices monthly at 8:00AM IST on the 1st"
 )
 scheduler.start()
