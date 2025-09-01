@@ -11,9 +11,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy app and assets
-COPY main.py .
-COPY Invoice.xlsx .
-COPY ManishaKhoriaSignature.png .
+COPY .
 
 # Default port for Render
 ENV PORT=10000
