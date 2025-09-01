@@ -11,7 +11,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy app and assets
-COPY .
+COPY ..
 
 # Default port for Render
 ENV PORT=10000
